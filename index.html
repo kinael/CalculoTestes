@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora de Testes – Terapeuta</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Cálculos dos Testes - Jaque Cleter</h1>
+  </header>
+
+  <!-- MENU PRINCIPAL -->
+  <main id="view-menu" class="view active">
+    <section class="card">
+      <h2>Selecione um teste</h2>
+      <div class="grid">
+        <button class="btn" data-open="srq20">SRQ-20</button>
+        <button class="btn" data-open="mhc">MHC-SF</button>
+        <button class="btn" data-open="est">EST</button>
+        <button class="btn" data-open="perma">PERMA</button>
+        <button class="btn" data-open="uwes">UWES</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- SRQ-20 -->
+  <main id="view-srq20" class="view">
+    <section class="card">
+      <div class="head-row">
+        <h2>SRQ-20</h2>
+        <button class="btn ghost back">← Voltar</button>
+      </div>
+
+      <div class="patient-row">
+        <label for="name-srq20">Nome do paciente</label>
+        <input id="name-srq20" type="text" placeholder="Ex.: Maria Souza" />
+      </div>
+
+      <p class="help">Marque <strong>Sim</strong> ou <strong>Não</strong> para cada um dos 20 itens.</p>
+      <form id="form-srq20" class="form-list"></form>
+      <div class="actions">
+        <button type="button" class="btn primary" id="calc-srq20">Calcular</button>
+        <button type="reset" class="btn ghost" id="reset-srq20">Limpar</button>
+      </div>
+      <div id="out-srq20" class="output" aria-live="polite"></div>
+
+      <h3 class="hist-title">Histórico – SRQ-20</h3>
+      <div id="hist-srq20" class="history"></div>
+    </section>
+  </main>
+
+  <!-- MHC-SF -->
+  <main id="view-mhc" class="view">
+    <section class="card">
+      <div class="head-row">
+        <h2>MHC-SF</h2>
+        <button class="btn ghost back">← Voltar</button>
+      </div>
+
+      <div class="patient-row">
+        <label for="name-mhc">Nome do paciente</label>
+        <input id="name-mhc" type="text" placeholder="Ex.: João Pereira" />
+      </div>
+
+      <p class="help">
+        <br><b>Florescimento</b>: ≥1 dos itens 1–3 com <b>6 ou 7</b> <em>e</em> ≥6 dos itens 4–14 com <b>6 ou 7</b>.
+        <br><b>Definhamento</b>: ≥1 dos itens 1–3 com <b>1 ou 2</b> <em>e</em> ≥6 dos itens 4–14 com <b>1 ou 2</b>.
+        <br><b>Moderada</b>: não atende aos critérios acima.
+      </p>
+      <form id="form-mhc" class="form-list"></form>
+      <div class="actions">
+        <button type="button" class="btn primary" id="calc-mhc">Calcular</button>
+        <button type="reset" class="btn ghost" id="reset-mhc">Limpar</button>
+      </div>
+
+
+
+      <div id="out-mhc" class="output" aria-live="polite"></div>
+
+      <h3 class="hist-title">Histórico – MHC-SF</h3>
+      <div id="hist-mhc" class="history"></div>
+    </section>
+  </main>
+
+  <!-- EST -->
+  <main id="view-est" class="view">
+    <section class="card">
+      <div class="head-row">
+        <h2>EST (Escala de Satisfação no Trabalho)</h2>
+        <button class="btn ghost back">← Voltar</button>
+      </div>
+
+      <div class="patient-row">
+        <label for="name-est">Nome do paciente</label>
+        <input id="name-est" type="text" placeholder="Ex.: Carla Lima" />
+      </div>
+
+      <form id="form-est" class="form-list"></form>
+      <div class="actions">
+        <button type="button" class="btn primary" id="calc-est">Calcular</button>
+        <button type="reset" class="btn ghost" id="reset-est">Limpar</button>
+      </div>
+      <div id="out-est" class="output" aria-live="polite"></div>
+
+      <h3 class="hist-title">Histórico – EST</h3>
+      <div id="hist-est" class="history"></div>
+    </section>
+  </main>
+
+  <!-- PERMA -->
+  <main id="view-perma" class="view">
+    <section class="card">
+      <div class="head-row">
+        <h2>PERMA</h2>
+        <button class="btn ghost back">← Voltar</button>
+      </div>
+
+      <div class="patient-row">
+        <label for="name-perma">Nome do paciente</label>
+        <input id="name-perma" type="text" placeholder="Ex.: Paulo Andrade" />
+      </div>
+
+      <form id="form-perma" class="form-list"></form>
+      <div class="actions">
+        <button type="button" class="btn primary" id="calc-perma">Calcular</button>
+        <button type="reset" class="btn ghost" id="reset-perma">Limpar</button>
+      </div>
+      <div id="out-perma" class="output" aria-live="polite"></div>
+
+      <h3 class="hist-title">Histórico – PERMA</h3>
+      <div id="hist-perma" class="history"></div>
+    </section>
+  </main>
+
+  <!-- UWES -->
+  <main id="view-uwes" class="view">
+    <section class="card">
+      <div class="head-row">
+        <h2>UWES (Engajamento no Trabalho)</h2>
+        <button class="btn ghost back">← Voltar</button>
+      </div>
+
+      <div class="patient-row">
+        <label for="name-uwes">Nome do paciente</label>
+        <input id="name-uwes" type="text" placeholder="Ex.: Ana Beatriz" />
+      </div>
+
+      <form id="form-uwes" class="form-list"></form>
+      <div class="actions">
+        <button type="button" class="btn primary" id="calc-uwes">Calcular</button>
+        <button type="reset" class="btn ghost" id="reset-uwes">Limpar</button>
+      </div>
+      <div class="note">
+        <details>
+          <summary>Faixas usadas (referência)</summary>
+          <table class="table">
+            <thead><tr><th>Dimensão</th><th>Baixo</th><th>Médio</th><th>Alto</th><th>Muito Alto</th></tr></thead>
+            <tbody>
+              <tr><td>Vigor</td><td>≤ 1,93</td><td>1,94 – 3,06</td><td>3,07 – 4,66</td><td>≥ 4,67</td></tr>
+              <tr><td>Dedicação</td><td>≤ 3,20</td><td>3,21 – 4,80</td><td>4,81 – 5,60</td><td>≥ 5,61</td></tr>
+              <tr><td>Absorção</td><td>≤ 3,00</td><td>3,01 – 4,90</td><td>4,91 – 5,79</td><td>≥ 5,80</td></tr>
+              <tr><td>Total</td><td>≤ 2,75</td><td>2,76 – 4,40</td><td>4,41 – 5,35</td><td>≥ 5,36</td></tr>
+            </tbody>
+          </table>
+        </details>
+      </div>
+      <div id="out-uwes" class="output" aria-live="polite"></div>
+
+      <h3 class="hist-title">Histórico – UWES</h3>
+      <div id="hist-uwes" class="history"></div>
+    </section>
+  </main>
+
+ 
+
+  <script src="app.js"></script>
+</body>
+</html>
