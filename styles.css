@@ -10,7 +10,6 @@
   --err:#ff6b6b;
 }
 
-
 *{box-sizing:border-box}
 html,body{
   margin:0;
@@ -260,4 +259,5 @@ html,body{
 @media (max-width: 380px){
   .scale{ grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
+
 
