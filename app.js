@@ -1,4 +1,3 @@
-/* ============ UTILS GERAIS ============ */
 const $ = (q, el=document) => el.querySelector(q);
 const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 const uuid = () => (crypto?.randomUUID?.() ?? `id_${Date.now()}_${Math.random().toString(16).slice(2)}`);
@@ -9,7 +8,36 @@ function showView(id){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-/* --------- Geradores de formulário com RÓTULOS --------- */
+const EMAIL_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzJOIdIHIrXQXyRXkegv8F7frhtv0k4dv07282T4Rnufnl_OUoZb4LWlRIQEE82aa-OrA/exec";
+const EMAIL_TO = "jaquelinecleter@hotmail.com";
+
+async function sendResultEmail(testName, patientName, resultHTML) {
+  const when = new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  const subject = `[${testName}] Resultado – ${patientName || "Paciente sem nome"} – ${when}`;
+  const bodyHTML = `
+    <div style="font-family:Arial,Helvetica,sans-serif">
+      <h2>${testName}</h2>
+      <p><b>Paciente:</b> ${patientName || "—"}</p>
+      <p><b>Data/Hora:</b> ${when}</p>
+      <hr>
+      ${resultHTML}
+    </div>
+  `;
+
+  const fd = new FormData();
+  fd.append("to", EMAIL_TO);
+  fd.append("subject", subject);
+  fd.append("html", bodyHTML);
+
+  try {
+    await fetch(EMAIL_WEBHOOK_URL, { method: "POST", body: fd, mode: "no-cors" });
+    return true;
+  } catch (err) {
+    console.error("Erro ao enviar e-mail:", err);
+    return false;
+  }
+}
+
 function makeNumberScaleWithLabels(name, labels, min, max, required=true){
   const frag = document.createDocumentFragment();
   for(let i=1;i<=labels.length;i++){
@@ -51,7 +79,6 @@ function makeBinaryWithLabels(name, labels){
   return frag;
 }
 
-/* --------- Leitura dos valores --------- */
 function readScale(name, nItems){
   const values = [];
   for(let i=1;i<=nItems;i++){
@@ -78,8 +105,6 @@ function fmtDate(ts){
   return d.toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
 }
 
-/* ============ TEXTOS DAS QUESTÕES ============ */
-/* SRQ-20 */
 const SRQ_ITEMS = [
   "Você tem dores de cabeça frequentes?",
   "Tem falta de apetite?",
@@ -103,7 +128,6 @@ const SRQ_ITEMS = [
   "Tem sensações desagradáveis no estômago?"
 ];
 
-/* MHC-SF */
 const MHC_ITEMS = [
   "Feliz",
   "Interessado(a) na vida",
@@ -121,7 +145,6 @@ const MHC_ITEMS = [
   "Que a sua vida tem um sentido ou direção"
 ];
 
-/* EST (25) */
 const EST_ITEMS = [
   "Com o espírito de colaboração dos meus colegas de trabalho.",
   "Com o modo como meu chefe organiza o trabalho do meu setor.",
@@ -150,7 +173,6 @@ const EST_ITEMS = [
   "Com a capacidade profissional do meu chefe."
 ];
 
-/* PERMA (23) – textos alinhados aos itens do PERMA-Profiler em PT-BR */
 const PERMA_ITEMS = [
   "Em geral, com que frequência você sente que está fazendo progresso na conquista dos seus objetivos?",
   "Com que frequência você fica profundamente envolvido(a) na atividade que está realizando?",
@@ -177,7 +199,6 @@ const PERMA_ITEMS = [
   "Considerando todas as coisas juntas, quão feliz você diria que está?"
 ];
 
-/* UWES (17) */
 const UWES_ITEMS = [
   "Em meu trabalho, sinto-me repleto(a) de energia.",
   "Eu acho que o trabalho que realizo é cheio de significado e propósito.",
@@ -198,7 +219,6 @@ const UWES_ITEMS = [
   "No trabalho, sou persistente mesmo quando as coisas não vão bem."
 ];
 
-/* ============ LOCALSTORAGE (HISTÓRICO) ============ */
 const LS_KEYS = {
   srq: 'hist_srq20',
   mhc: 'hist_mhc',
@@ -206,56 +226,15 @@ const LS_KEYS = {
   perma: 'hist_perma',
   uwes: 'hist_uwes',
 };
-
-function loadHist(key){
-  try{ return JSON.parse(localStorage.getItem(key) || '[]'); }
-  catch{ return []; }
-}
-function saveHist(key, arr){
-  localStorage.setItem(key, JSON.stringify(arr));
-}
-function addHist(key, rec){
-  const arr = loadHist(key);
-  arr.unshift(rec);
-  saveHist(key, arr);
-}
-function delHist(key, id){
-  const arr = loadHist(key).filter(r => r.id !== id);
-  saveHist(key, arr);
-}
-
-/* Render genérico de histórico como tabela */
+function loadHist(key){ try{ return JSON.parse(localStorage.getItem(key) || '[]'); } catch{ return []; } }
+function saveHist(key, arr){ localStorage.setItem(key, JSON.stringify(arr)); }
+function addHist(key, rec){ const arr = loadHist(key); arr.unshift(rec); saveHist(key, arr); }
+function delHist(key, id){ const arr = loadHist(key).filter(r => r.id !== id); saveHist(key, arr); }
 function renderHistory(containerId, key){
   const el = $(`#${containerId}`);
-  const items = loadHist(key);
-  if(!items.length){
-    el.innerHTML = `<p class="empty">Sem registros ainda.</p>`;
-    return;
-  }
-  const rows = items.map(r => `
-    <tr>
-      <td><b>${r.name || '—'}</b><br/><small>${fmtDate(r.ts)}</small></td>
-      <td>${r.resultHTML}</td>
-      <td class="actions">
-        <button class="btn ghost btn-del" data-key="${key}" data-id="${r.id}">🗑 Apagar</button>
-      </td>
-    </tr>
-  `).join('');
-  el.innerHTML = `
-    <table class="table">
-      <thead><tr><th>Paciente / Data</th><th>Resultado</th><th></th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-  el.querySelectorAll('.btn-del').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      delHist(b.dataset.key, b.dataset.id);
-      renderHistory(containerId, key);
-    });
-  });
+  el.innerHTML = `<p class="empty">Sem registros ainda.</p>`;
 }
 
-/* ============ NAVEGAÇÃO ============ */
 $$('[data-open]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     showView(btn.dataset.open);
@@ -270,14 +249,35 @@ $$('.back').forEach(btn=>{
   btn.addEventListener('click',()=>showView('menu'));
 });
 
-/* ============ SRQ-20 ============ */
+function showSentMessage(outSelector, ok){
+  const el = $(outSelector);
+  if(ok){
+    el.innerHTML = `<p class="kv"><b>Resposta enviada para Jaque Cleter por e-mail!</b></p>`;
+  }else{
+    el.innerHTML = `<p class="kv"><b class="result-err">Não foi possível enviar o e-mail. Tente novamente.</b></p>`;
+  }
+}
+
+function insertLegendBefore(formEl, title, numbersLine, labelsLine){
+  const wrap = document.createElement('div');
+  wrap.className = 'legend legend-block';
+  wrap.innerHTML = `
+    <div class="legend-title"><b>${title}</b></div>
+    <div class="legend-grid" role="note" aria-label="Legenda da escala ${title}">
+      <div class="legend-row legend-nums">${numbersLine}</div>
+      <div class="legend-row legend-texts">${labelsLine}</div>
+    </div>
+  `;
+  formEl.parentNode.insertBefore(wrap, formEl);
+}
+
 (function initSRQ(){
   const form = $("#form-srq20");
   form.appendChild(makeBinaryWithLabels("srq", SRQ_ITEMS));
 
   $("#reset-srq20").addEventListener("click", ()=> { $("#out-srq20").innerHTML = ""; });
 
-  $("#calc-srq20").addEventListener("click", ()=>{
+  $("#calc-srq20").addEventListener("click", async ()=>{
     const vals = readScale("srq", SRQ_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
     const sim = vals.filter(v=>v===1).length;
@@ -292,26 +292,30 @@ $$('.back').forEach(btn=>{
       <p class="kv"><b>Total de “Sim”:</b> ${sim} / ${SRQ_ITEMS.length}</p>
       <p>${clsHTML}</p>
     `;
-    $("#out-srq20").innerHTML = outHTML;
 
     const name = $("#name-srq20").value.trim();
-    if(name){
-      addHist(LS_KEYS.srq, { id:uuid(), ts:Date.now(), name, resultHTML: outHTML });
-      renderHistory('hist-srq20', LS_KEYS.srq);
-    }
+    const ok = await sendResultEmail("SRQ-20", name, outHTML);
+    showSentMessage("#out-srq20", ok);
   });
 
   renderHistory('hist-srq20', LS_KEYS.srq);
 })();
 
-/* ============ MHC-SF (cortes 6–7 e 1–2) ============ */
 (function initMHC(){
   const form = $("#form-mhc");
+
+  insertLegendBefore(
+    form,
+    "MHC:",
+    "",
+    "Totalmente Insatisfeito · Muito Insatisfeito · Insatisfeito · Indiferente · Satisfeito · Muito Satisfeito · Totalmente Satisfeito"
+  );
+
   form.appendChild(makeNumberScaleWithLabels("mhc", MHC_ITEMS, 1, 7));
 
   $("#reset-mhc").addEventListener("click", ()=> { $("#out-mhc").innerHTML = ""; });
 
-  $("#calc-mhc").addEventListener("click", ()=>{
+  $("#calc-mhc").addEventListener("click", async ()=>{
     const vals = readScale("mhc", MHC_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -338,21 +342,25 @@ $$('.back').forEach(btn=>{
       <p class="kv"><b>Itens 4–14 baixos (1–2):</b> ${euLowCount} de 11</p>
       <p>Classificação: <span class="badge ${badgeCls}">${classe}</span></p>
     `;
-    $("#out-mhc").innerHTML = outHTML;
 
     const name = $("#name-mhc").value.trim();
-    if(name){
-      addHist(LS_KEYS.mhc, { id:uuid(), ts:Date.now(), name, resultHTML: outHTML });
-      renderHistory('hist-mhc', LS_KEYS.mhc);
-    }
+    const ok = await sendResultEmail("MHC-SF", name, outHTML);
+    showSentMessage("#out-mhc", ok);
   });
 
   renderHistory('hist-mhc', LS_KEYS.mhc);
 })();
 
-/* ============ EST ============ */
 (function initEST(){
   const form = $("#form-est");
+
+  insertLegendBefore(
+    form,
+    "EST:",
+    "",
+    "Totalmente Insatisfeito · Muito Insatisfeito · Insatisfeito · Indiferente · Satisfeito · Muito Satisfeito · Totalmente Satisfeito"
+  );
+
   form.appendChild(makeNumberScaleWithLabels("est", EST_ITEMS, 1, 7));
 
   $("#reset-est").addEventListener("click", ()=> { $("#out-est").innerHTML = ""; });
@@ -372,7 +380,7 @@ $$('.back').forEach(btn=>{
     return {label:"—", cls:""};
   }
 
-  $("#calc-est").addEventListener("click", ()=>{
+  $("#calc-est").addEventListener("click", async ()=>{
     const vals = readScale("est", EST_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -392,22 +400,26 @@ $$('.back').forEach(btn=>{
       <ul>${htmlList}</ul>
       <p class="kv"><b>Média global (média das dimensões):</b> ${geral}</p>
     `;
-    $("#out-est").innerHTML = outHTML;
 
     const name = $("#name-est").value.trim();
-    if(name){
-      addHist(LS_KEYS.est, { id:uuid(), ts:Date.now(), name, resultHTML: outHTML });
-      renderHistory('hist-est', LS_KEYS.est);
-    }
+    const ok = await sendResultEmail("EST (Escala de Satisfação no Trabalho)", name, outHTML);
+    showSentMessage("#out-est", ok);
   });
 
   renderHistory('hist-est', LS_KEYS.est);
 })();
 
-/* ============ PERMA ============ */
 (function initPERMA(){
   const form = $("#form-perma");
-  form.appendChild(makeNumberScaleWithLabels("perma", PERMA_ITEMS, 1, 10));
+
+  insertLegendBefore(
+    form,
+    "PERMA",
+    "",
+    "0 = nunca … 10 = sempre"
+  );
+
+  form.appendChild(makeNumberScaleWithLabels("perma", PERMA_ITEMS, 0, 10));
 
   $("#reset-perma").addEventListener("click", ()=> { $("#out-perma").innerHTML = ""; });
 
@@ -423,7 +435,7 @@ $$('.back').forEach(btn=>{
     "Solidão": [11],
   };
 
-  $("#calc-perma").addEventListener("click", ()=>{
+  $("#calc-perma").addEventListener("click", async ()=>{
     const vals = readScale("perma", PERMA_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -434,21 +446,25 @@ $$('.back').forEach(btn=>{
       list += `<li class="kv"><b>${nome}:</b> ${m}</li>`;
     }
     const outHTML = `<h3>Resultados</h3><ul>${list}</ul>`;
-    $("#out-perma").innerHTML = outHTML;
 
     const name = $("#name-perma").value.trim();
-    if(name){
-      addHist(LS_KEYS.perma, { id:uuid(), ts:Date.now(), name, resultHTML: outHTML });
-      renderHistory('hist-perma', LS_KEYS.perma);
-    }
+    const ok = await sendResultEmail("PERMA", name, outHTML);
+    showSentMessage("#out-perma", ok);
   });
 
   renderHistory('hist-perma', LS_KEYS.perma);
 })();
 
-/* ============ UWES ============ */
 (function initUWES(){
   const form = $("#form-uwes");
+
+  insertLegendBefore(
+    form,
+    "UWES",
+    "",
+    "Nunca · Quase Nunca · Algumas Vezes · Regularmente · Muitas Vezes · Quase Sempre · Sempre"
+  );
+
   form.appendChild(makeNumberScaleWithLabels("uwes", UWES_ITEMS, 0, 6));
 
   $("#reset-uwes").addEventListener("click", ()=> { $("#out-uwes").innerHTML = ""; });
@@ -464,7 +480,7 @@ $$('.back').forEach(btn=>{
     total:        [2.75, 2.76, 4.40, 4.41, 5.36],
   };
 
-  $("#calc-uwes").addEventListener("click", ()=>{
+  $("#calc-uwes").addEventListener("click", async ()=>{
     const vals = readScale("uwes", UWES_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -488,17 +504,13 @@ $$('.back').forEach(btn=>{
       </ul>
       <p class="small">Interpretação geral: quanto maior a média, maior o engajamento.</p>
     `;
-    $("#out-uwes").innerHTML = outHTML;
 
     const name = $("#name-uwes").value.trim();
-    if(name){
-      addHist(LS_KEYS.uwes, { id:uuid(), ts:Date.now(), name, resultHTML: outHTML });
-      renderHistory('hist-uwes', LS_KEYS.uwes);
-    }
+    const ok = await sendResultEmail("UWES (Engajamento no Trabalho)", name, outHTML);
+    showSentMessage("#out-uwes", ok);
   });
 
   renderHistory('hist-uwes', LS_KEYS.uwes);
 })();
 
-/* ============ START ============ */
 showView('menu');
