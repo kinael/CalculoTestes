@@ -8,7 +8,6 @@ function showView(id){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-
 const EMAIL_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzJOIdIHIrXQXyRXkegv8F7frhtv0k4dv07282T4Rnufnl_OUoZb4LWlRIQEE82aa-OrA/exec";
 const EMAIL_TO = "jaquelinecleter@hotmail.com";
 
@@ -515,4 +514,5 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
 })();
 
 showView('menu');
+
 
