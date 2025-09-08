@@ -514,5 +514,3 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
 })();
 
 showView('menu');
-
-
