@@ -308,7 +308,7 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     form,
     "MHC:",
     "",
-    "Totalmente Insatisfeito · Muito Insatisfeito · Insatisfeito · Indiferente · Satisfeito · Muito Satisfeito · Totalmente Satisfeito"
+    "(1)Totalmente Insatisfeito · (2)Muito Insatisfeito · (3)Insatisfeito · (4)Indiferente · (5)Satisfeito · (6)Muito Satisfeito · (7)Totalmente Satisfeito"
   );
 
   form.appendChild(makeNumberScaleWithLabels("mhc", MHC_ITEMS, 1, 7));
@@ -358,7 +358,7 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     form,
     "EST:",
     "",
-    "Totalmente Insatisfeito · Muito Insatisfeito · Insatisfeito · Indiferente · Satisfeito · Muito Satisfeito · Totalmente Satisfeito"
+    "(1)Totalmente Insatisfeito · (2)Muito Insatisfeito · (3)Insatisfeito · (4)Indiferente · (5)Satisfeito · (6)Muito Satisfeito · (7)Totalmente Satisfeito"
   );
 
   form.appendChild(makeNumberScaleWithLabels("est", EST_ITEMS, 1, 7));
@@ -462,7 +462,7 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     form,
     "UWES",
     "",
-    "Nunca · Quase Nunca · Algumas Vezes · Regularmente · Muitas Vezes · Quase Sempre · Sempre"
+    "(0)Nunca · (1)Quase Nunca · (2)Algumas Vezes · (3)Regularmente · (4)Muitas Vezes · (5)Quase Sempre · (6)Sempre"
   );
 
   form.appendChild(makeNumberScaleWithLabels("uwes", UWES_ITEMS, 0, 6));
