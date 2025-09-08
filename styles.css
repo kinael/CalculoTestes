@@ -188,7 +188,38 @@ html,body{
 .table th{background:#10183a}
 .table td.actions{width:100px; text-align:center}
 
-.legend{margin:6px 0 0 20px}
+.legend{
+  margin:6px 0 0 20px;
+}
+.legend-block{
+  margin:8px 0 10px;
+  padding:10px 12px;
+  border:1px dashed #2a3a72;
+  border-radius:10px;
+  background:#0c132d;
+}
+.legend-title{
+  color:#a6b3e2;
+  margin-bottom:6px;
+}
+.legend-grid{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.legend-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:flex-end;
+}
+.legend-nums{
+  font-weight:700;
+  letter-spacing:.5px;
+}
+.legend-texts{
+  color:var(--muted);
+}
 
 .hist-title{margin:18px 0 8px}
 .history .empty{color:var(--muted); font-style:italic}
