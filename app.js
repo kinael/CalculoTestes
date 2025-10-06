@@ -1,3 +1,4 @@
+// utilidades
 const $ = (q, el=document) => el.querySelector(q);
 const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 const uuid = () => (crypto?.randomUUID?.() ?? `id_${Date.now()}_${Math.random().toString(16).slice(2)}`);
@@ -278,6 +279,9 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   $("#reset-srq20").addEventListener("click", ()=> { $("#out-srq20").innerHTML = ""; });
 
   $("#calc-srq20").addEventListener("click", async ()=>{
+    const name = $("#name-srq20").value.trim();
+    if (!name) { alert("Digite o nome do paciente antes de calcular."); return; }
+
     const vals = readScale("srq", SRQ_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
     const sim = vals.filter(v=>v===1).length;
@@ -293,7 +297,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
       <p>${clsHTML}</p>
     `;
 
-    const name = $("#name-srq20").value.trim();
     const ok = await sendResultEmail("SRQ-20", name, outHTML);
     showSentMessage("#out-srq20", ok);
   });
@@ -316,6 +319,9 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   $("#reset-mhc").addEventListener("click", ()=> { $("#out-mhc").innerHTML = ""; });
 
   $("#calc-mhc").addEventListener("click", async ()=>{
+    const name = $("#name-mhc").value.trim();
+    if (!name) { alert("Digite o nome do paciente antes de calcular."); return; }
+
     const vals = readScale("mhc", MHC_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -343,7 +349,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
       <p>Classificação: <span class="badge ${badgeCls}">${classe}</span></p>
     `;
 
-    const name = $("#name-mhc").value.trim();
     const ok = await sendResultEmail("MHC-SF", name, outHTML);
     showSentMessage("#out-mhc", ok);
   });
@@ -353,7 +358,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
 
 (function initEST(){
   const form = $("#form-est");
-
   insertLegendBefore(
     form,
     "EST:",
@@ -362,7 +366,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   );
 
   form.appendChild(makeNumberScaleWithLabels("est", EST_ITEMS, 1, 7));
-
   $("#reset-est").addEventListener("click", ()=> { $("#out-est").innerHTML = ""; });
 
   const dims = {
@@ -381,6 +384,9 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   }
 
   $("#calc-est").addEventListener("click", async ()=>{
+    const name = $("#name-est").value.trim();
+    if (!name) { alert("Digite o nome do paciente antes de calcular."); return; }
+
     const vals = readScale("est", EST_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -396,12 +402,10 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     const geral = m2(mean(dimMeans));
     const outHTML = `
       <h3>Resultados por Dimensão</h3>
-      <div class="kv">Quanto maior a média (1–7), maior o grau de contentamento.</div>
       <ul>${htmlList}</ul>
-      <p class="kv"><b>Média global (média das dimensões):</b> ${geral}</p>
+      <p class="kv"><b>Média global:</b> ${geral}</p>
     `;
 
-    const name = $("#name-est").value.trim();
     const ok = await sendResultEmail("EST (Escala de Satisfação no Trabalho)", name, outHTML);
     showSentMessage("#out-est", ok);
   });
@@ -411,16 +415,8 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
 
 (function initPERMA(){
   const form = $("#form-perma");
-
-  insertLegendBefore(
-    form,
-    "PERMA",
-    "",
-    "0 = nunca … 10 = sempre"
-  );
-
+  insertLegendBefore(form, "PERMA", "", "0 = nunca … 10 = sempre");
   form.appendChild(makeNumberScaleWithLabels("perma", PERMA_ITEMS, 0, 10));
-
   $("#reset-perma").addEventListener("click", ()=> { $("#out-perma").innerHTML = ""; });
 
   const sets = {
@@ -436,6 +432,9 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   };
 
   $("#calc-perma").addEventListener("click", async ()=>{
+    const name = $("#name-perma").value.trim();
+    if (!name) { alert("Digite o nome do paciente antes de calcular."); return; }
+
     const vals = readScale("perma", PERMA_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -447,7 +446,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     }
     const outHTML = `<h3>Resultados</h3><ul>${list}</ul>`;
 
-    const name = $("#name-perma").value.trim();
     const ok = await sendResultEmail("PERMA", name, outHTML);
     showSentMessage("#out-perma", ok);
   });
@@ -457,7 +455,6 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
 
 (function initUWES(){
   const form = $("#form-uwes");
-
   insertLegendBefore(
     form,
     "UWES",
@@ -466,21 +463,22 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
   );
 
   form.appendChild(makeNumberScaleWithLabels("uwes", UWES_ITEMS, 0, 6));
-
   $("#reset-uwes").addEventListener("click", ()=> { $("#out-uwes").innerHTML = ""; });
 
   const VIGOR = [1,4,8,12,15,17];
   const DEDIC = [2,5,7,10,13];
   const ABSOR = [3,6,9,11,14,16];
-
   const RANGES = {
-    vigor:        [1.93, 1.94, 3.06, 3.07, 4.67],
-    dedicacao:    [3.20, 3.21, 4.80, 4.81, 5.61],
-    absorcao:     [3.00, 3.01, 4.90, 4.91, 5.80],
-    total:        [2.75, 2.76, 4.40, 4.41, 5.36],
+    vigor: [1.93, 1.94, 3.06, 3.07, 4.67],
+    dedicacao: [3.20, 3.21, 4.80, 4.81, 5.61],
+    absorcao: [3.00, 3.01, 4.90, 4.91, 5.80],
+    total: [2.75, 2.76, 4.40, 4.41, 5.36],
   };
 
   $("#calc-uwes").addEventListener("click", async ()=>{
+    const name = $("#name-uwes").value.trim();
+    if (!name) { alert("Digite o nome do paciente antes de calcular."); return; }
+
     const vals = readScale("uwes", UWES_ITEMS.length);
     if(!vals){ alert("Responda todos os itens."); return; }
 
@@ -497,15 +495,13 @@ function insertLegendBefore(formEl, title, numbersLine, labelsLine){
     const outHTML = `
       <h3>Resultados</h3>
       <ul>
-        <li class="kv"><b>Vigor:</b> ${mV} <span class="badge ${clsV==='Baixo'?'err':(clsV==='Médio'?'warn':'ok')}">(${clsV})</span></li>
-        <li class="kv"><b>Dedicação:</b> ${mD} <span class="badge ${clsD==='Baixo'?'err':(clsD==='Médio'?'warn':'ok')}">(${clsD})</span></li>
-        <li class="kv"><b>Absorção:</b> ${mA} <span class="badge ${clsA==='Baixo'?'err':(clsA==='Médio'?'warn':'ok')}">(${clsA})</span></li>
-        <li class="kv"><b>Escore Total:</b> ${mT} <span class="badge ${clsT==='Baixo'?'err':(clsT==='Médio'?'warn':'ok')}">(${clsT})</span></li>
+        <li class="kv"><b>Vigor:</b> ${mV} <span class="badge">${clsV}</span></li>
+        <li class="kv"><b>Dedicação:</b> ${mD} <span class="badge">${clsD}</span></li>
+        <li class="kv"><b>Absorção:</b> ${mA} <span class="badge">${clsA}</span></li>
+        <li class="kv"><b>Escore Total:</b> ${mT} <span class="badge">${clsT}</span></li>
       </ul>
-      <p class="small">Interpretação geral: quanto maior a média, maior o engajamento.</p>
     `;
 
-    const name = $("#name-uwes").value.trim();
     const ok = await sendResultEmail("UWES (Engajamento no Trabalho)", name, outHTML);
     showSentMessage("#out-uwes", ok);
   });
