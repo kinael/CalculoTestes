@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -32,6 +31,12 @@
         <button class="btn ghost back">← Voltar</button>
       </div>
 
+      <p class="scale-desc">
+        O SRQ-20 (Self-Reporting Questionnaire) é um instrumento de rastreio de
+        transtornos mentais comuns (como sintomas de ansiedade e depressão),
+        amplamente utilizado em serviços de atenção primária à saúde.
+      </p>
+
       <div class="patient-row">
         <label for="name-srq20">Digite seu nome:</label>
         <input id="name-srq20" type="text" placeholder="Ex.: Maria Souza" />
@@ -47,6 +52,14 @@
 
       <h3 class="hist-title">Histórico – SRQ-20</h3>
       <div id="hist-srq20" class="history"></div>
+
+      <footer class="scale-footer">
+        <h4>Referências</h4>
+        <p>
+          SELF-REPORTING QUESTIONNAIRE (SRQ-20)<br />
+          WHO (1993)
+        </p>
+      </footer>
     </section>
   </main>
 
@@ -56,6 +69,13 @@
         <h2>MHC-SF</h2>
         <button class="btn ghost back">← Voltar</button>
       </div>
+
+      <p class="scale-desc">
+        O MHC-SF (Mental Health Continuum – Short Form) avalia a saúde mental
+        positiva, considerando níveis de bem-estar emocional, psicológico e
+        social, classificando a pessoa em florescente, moderadamente saudável
+        ou com baixa saúde mental.
+      </p>
 
       <div class="patient-row">
         <label for="name-mhc">Digite seu nome:</label>
@@ -68,12 +88,18 @@
         <button type="reset" class="btn ghost" id="reset-mhc">Limpar</button>
       </div>
 
-
-
       <div id="out-mhc" class="output" aria-live="polite"></div>
 
       <h3 class="hist-title">Histórico – MHC-SF</h3>
       <div id="hist-mhc" class="history"></div>
+
+      <footer class="scale-footer">
+        <h4>Referências</h4>
+        <p>
+          MENTAL HEALTH CONTINUUM SHORT FORM (MHC-SF)<br />
+          KEYES (2009)
+        </p>
+      </footer>
     </section>
   </main>
 
@@ -83,6 +109,12 @@
         <h2>EST (Escala de Satisfação no Trabalho)</h2>
         <button class="btn ghost back">← Voltar</button>
       </div>
+
+      <p class="scale-desc">
+        A EST (Escala de Satisfação no Trabalho) avalia o grau de satisfação
+        do indivíduo em relação a diferentes aspectos do trabalho, como
+        colegas, chefia, salário, natureza das tarefas e ambiente organizacional.
+      </p>
 
       <div class="patient-row">
         <label for="name-est">Digite seu nome:</label>
@@ -98,6 +130,14 @@
 
       <h3 class="hist-title">Histórico – EST</h3>
       <div id="hist-est" class="history"></div>
+
+      <footer class="scale-footer">
+        <h4>Referências</h4>
+        <p>
+          ESCALA DE SATISFAÇÃO NO TRABALHO (FIB-T)<br />
+          SIQUEIRA (2008)
+        </p>
+      </footer>
     </section>
   </main>
 
@@ -107,6 +147,13 @@
         <h2>PERMA</h2>
         <button class="btn ghost back">← Voltar</button>
       </div>
+
+      <p class="scale-desc">
+        O PERMA-Profiler é um questionário baseado no modelo PERMA de bem-estar,
+        que avalia cinco dimensões principais: emoções positivas, engajamento,
+        relacionamentos positivos, sentido de vida e realizações, além de
+        indicadores de saúde geral.
+      </p>
 
       <div class="patient-row">
         <label for="name-perma">Digite seu nome:</label>
@@ -122,6 +169,24 @@
 
       <h3 class="hist-title">Histórico – PERMA</h3>
       <div id="hist-perma" class="history"></div>
+
+      <footer class="scale-footer">
+        <h4>Referências</h4>
+        <p>
+          de Carvalho, T.F., de Aquino, S.D., &amp; Natividade, J.C. (2019).
+          Flourishing in the Brazilian context: Evidence of the validity of the
+          PERMA-profiler scale. Current Psychology. doi: 10.1007/s12144-021-01587-w<br /><br />
+          Carvalho, T. F., Marot, T. A., &amp; Natividade, J. C. Evidências de
+          validade da escala de florescimento PERMA-Profiler para o contexto
+          brasileiro. In: 49ª Reunião Anual da Sociedade Brasileira de Psicologia,
+          2019, João Pessoa. 49ª Reunião Anual da Sociedade Brasileira de
+          Psicologia, 2019.<br /><br />
+          Carvalho, T. F., Marot, T., Aquino, S. D., &amp; Natividade, J. C.
+          (2019). Relação entre os cinco grandes fatores de personalidade e o
+          bem-estar no modelo PERMA. Pôster apresentado na 49ª Reunião Anual da
+          Sociedade Brasileira de Psicologia, João Pessoa, PB.
+        </p>
+      </footer>
     </section>
   </main>
 
@@ -131,6 +196,13 @@
         <h2>UWES (Engajamento no Trabalho)</h2>
         <button class="btn ghost back">← Voltar</button>
       </div>
+
+      <p class="scale-desc">
+        A UWES (Utrecht Work Engagement Scale) mede o engajamento no trabalho
+        em três dimensões principais: vigor, dedicação e absorção, indicando o
+        quanto a pessoa se sente energizada, envolvida e concentrada nas suas
+        atividades profissionais.
+      </p>
 
       <div class="patient-row">
         <label for="name-uwes">Digite seu nome:</label>
@@ -147,13 +219,17 @@
 
       <h3 class="hist-title">Histórico – UWES</h3>
       <div id="hist-uwes" class="history"></div>
+
+      <footer class="scale-footer">
+        <h4>Referências</h4>
+        <p>
+          UTRECHT WORK ENGAGEMENT SCALE (UWES)<br />
+          SCHAUFELI ET AL (2015)
+        </p>
+      </footer>
     </section>
   </main>
-
- 
 
   <script src="app.js"></script>
 </body>
 </html>
-
-
